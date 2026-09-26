@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">crimeshield</string>
+    <string name="report_incident">REPORT INCIDENT</string>
+    <string name="describe_what_happened">Describe what happened</string>
+    <string name="back">Back</string>
+    <string name="incident_location">Incident Location</string>
+    <string name="report_incident1">REPORT INCIDENT</string>
+    <string name="crimeshield_logo">CrimeShield Logo</string>
+    <string name="crimeshield">CRIMESHIELD</string>
+    <string name="anonymous_safety_network">Anonymous Safety Network</string>
+    <string name="report_an_incident">REPORT AN INCIDENT</string>
+    <string name="view_incident_dashboard">VIEW INCIDENT DASHBOARD</string>
+    <string name="view_pattern_analysis">VIEW PATTERN ANALYSIS</string>
+    <string name="crime_type">Crime Type</string>
+    <string name="your_report_will_be_submitted_anonymously">Your report will be submitted anonymously.</string>
+    <string name="severity">Severity</string>
+    <string name="enter_location">Enter location</string>
+    <string name="description">Description</string>
+    <string name="describe_what_happened1">Describe what happened</string>
+    <string name="submit_anonymous_report">SUBMIT ANONYMOUS REPORT</string>
+    <string name="back1">Back</string>
+    <string name="crimeshield1">CRIMESHIELD</string>
+</resources>

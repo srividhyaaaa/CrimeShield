@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center"
+    android:background="#101318">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="20dp"
+        android:src="@drawable/ic_app_logo"
+        android:contentDescription="@string/crimeshield_logo" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/crimeshield"
+        android:textColor="#FFF"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/anonymous_safety_network"
+        android:textColor="#A9AFB8"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btnReport"
+        style="@style/CSBtn"
+        android:layout_marginTop="48dp"
+        android:text="@string/report_an_incident" />
+
+    <Button
+        android:id="@+id/btnDashboard"
+        style="@style/CSBtn"
+        android:text="@string/view_incident_dashboard" />
+
+    <Button
+        android:id="@+id/btnAnalysis"
+        style="@style/CSBtn"
+        android:text="@string/view_pattern_analysis" />
+
+</LinearLayout>

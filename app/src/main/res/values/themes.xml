@@ -1,0 +1,146 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style
+        name="Base.Theme.Crimeshield"
+        parent="Theme.Material3.DayNight.NoActionBar">
+
+        <item name="colorPrimary">
+            @color/accent_blue
+        </item>
+
+        <item name="android:windowBackground">
+            @color/bg_dark
+        </item>
+
+        <item name="android:statusBarColor">
+            @color/bg_dark
+        </item>
+
+    </style>
+
+    <style
+        name="Theme.Crimeshield"
+        parent="Base.Theme.Crimeshield" />
+
+    <style
+        name="CSBtn"
+        parent="Widget.Material3.Button">
+
+        <item name="android:layout_width">
+            match_parent
+        </item>
+
+        <item name="android:layout_height">
+            64dp
+        </item>
+
+        <item name="android:layout_marginTop">
+            16dp
+        </item>
+
+        <item name="android:background">
+            @drawable/btn_bg
+        </item>
+
+        <item name="android:textColor">
+            #FFFFFF
+        </item>
+
+        <item name="android:textStyle">
+            bold
+        </item>
+
+        <item name="android:textSize">
+            15sp
+        </item>
+
+    </style>
+
+    <style
+        name="CSTextCard">
+
+        <item name="android:layout_width">
+            match_parent
+        </item>
+
+        <item name="android:layout_height">
+            100dp
+        </item>
+
+        <item name="android:background">
+            #1B2028
+        </item>
+
+        <item name="android:gravity">
+            center
+        </item>
+
+        <item name="android:textColor">
+            #FFFFFF
+        </item>
+
+        <item name="android:textStyle">
+            bold
+        </item>
+
+    </style>
+
+    <style
+        name="CSLabel">
+
+        <item name="android:layout_width">
+            wrap_content
+        </item>
+
+        <item name="android:layout_height">
+            wrap_content
+        </item>
+
+        <item name="android:layout_marginTop">
+            24dp
+        </item>
+
+        <item name="android:textColor">
+            #FFFFFF
+        </item>
+
+        <item name="android:textSize">
+            17sp
+        </item>
+
+        <item name="android:textStyle">
+            bold
+        </item>
+
+    </style>
+
+    <style
+        name="CSEdit">
+
+        <item name="android:layout_width">
+            match_parent
+        </item>
+
+        <item name="android:layout_height">
+            48dp
+        </item>
+
+        <item name="android:backgroundTint">
+            #777
+        </item>
+
+        <item name="android:textColor">
+            #FFF
+        </item>
+
+        <item name="android:textColorHint">
+            #9EA3AA
+        </item>
+
+        <item name="android:textSize">
+            16sp
+        </item>
+
+    </style>
+
+</resources>

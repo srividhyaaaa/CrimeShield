@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/dashboardScroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#101318">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_arrow_back"
+            android:contentDescription="@string/back1" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/crimeshield1"
+            android:textColor="#FFF"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="INCIDENT DASHBOARD"
+            android:textColor="#A9AFB8" />
+
+        <TextView
+            android:id="@+id/tvTotalReports"
+            style="@style/CSTextCard"
+            android:layout_marginTop="28dp" />
+
+        <TextView
+            android:id="@+id/tvHighRisk"
+            style="@style/CSTextCard"
+            android:layout_marginTop="14dp" />
+
+        <TextView
+            android:id="@+id/tvCommonCrime"
+            style="@style/CSTextCard"
+            android:layout_marginTop="14dp" />
+
+        <TextView
+            android:id="@+id/tvCommonArea"
+            style="@style/CSTextCard"
+            android:layout_marginTop="14dp" />
+
+        <TextView
+            style="@style/CSLabel"
+            android:text="FILTER INCIDENTS" />
+
+        <EditText
+            android:id="@+id/etSearch"
+            style="@style/CSEdit"
+            android:layout_height="50dp"
+            android:hint="Search"
+            android:inputType="text" />
+
+        <Spinner
+            android:id="@+id/spinnerFilterCrime"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+
+        <Spinner
+            android:id="@+id/spinnerFilterSeverity"
+            android:layout_width="match_parent"
+            android:layout_height="50dp" />
+
+        <Button
+            android:id="@+id/btnApplyFilter"
+            style="@style/CSBtn"
+            android:text="APPLY" />
+
+        <Button
+            android:id="@+id/btnClearFilter"
+            style="@style/CSBtn"
+            android:layout_marginTop="8dp"
+            android:text="CLEAR" />
+
+        <TextView
+            style="@style/CSLabel"
+            android:text="RECENT INCIDENTS" />
+
+        <TextView
+            android:id="@+id/tvRecentIncidents"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:background="#1B2028"
+            android:padding="16dp"
+            android:textColor="#D0D4DA" />
+
+    </LinearLayout>
+</ScrollView>
