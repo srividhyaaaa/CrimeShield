@@ -1,214 +1,560 @@
 package com.example.crimeshield;
 
-import android.database.Cursor;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.DocumentSnapshot;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class DashboardActivity extends AppCompatActivity {
+
     TextView tvTotalReports;
     TextView tvHighRisk;
     TextView tvCommonCrime;
     TextView tvCommonArea;
     TextView tvRecentIncidents;
+
     EditText etSearch;
+
     Spinner spinnerFilterCrime;
     Spinner spinnerFilterSeverity;
+
+    Button btnApplyFilter;
+    Button btnClearFilter;
+
     ScrollView dashboardScroll;
-    DatabaseHelper db;
+
+    FirebaseFirestore firestore;
+
+    List<ReportModel> allReports = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_dashboard);
 
         dashboardScroll = findViewById(R.id.dashboardScroll);
-        
-        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
 
         tvTotalReports = findViewById(R.id.tvTotalReports);
         tvHighRisk = findViewById(R.id.tvHighRisk);
         tvCommonCrime = findViewById(R.id.tvCommonCrime);
         tvCommonArea = findViewById(R.id.tvCommonArea);
         tvRecentIncidents = findViewById(R.id.tvRecentIncidents);
-        
+
         etSearch = findViewById(R.id.etSearch);
-        spinnerFilterCrime = findViewById(R.id.spinnerFilterCrime);
-        spinnerFilterSeverity = findViewById(R.id.spinnerFilterSeverity);
-        
-        db = new DatabaseHelper(this);
 
-        setupSpinner(spinnerFilterCrime, new String[]{
-                "All Crime Types", 
-                "Theft", 
-                "Fraud", 
-                "Assault", 
-                "Cyber Crime", 
-                "Harassment", 
-                "Vandalism", 
+        spinnerFilterCrime =
+                findViewById(R.id.spinnerFilterCrime);
+
+        spinnerFilterSeverity =
+                findViewById(R.id.spinnerFilterSeverity);
+
+        btnApplyFilter =
+                findViewById(R.id.btnApplyFilter);
+
+        btnClearFilter =
+                findViewById(R.id.btnClearFilter);
+
+        firestore = FirebaseFirestore.getInstance();
+
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
+
+        setupFilters();
+
+        loadReportsFromFirebase();
+
+        btnApplyFilter.setOnClickListener(
+                v -> applyFilter()
+        );
+
+        btnClearFilter.setOnClickListener(
+                v -> clearFilter()
+        );
+    }
+
+    private void setupFilters() {
+
+        String[] crimeTypes = {
+                "All Crime Types",
+                "Theft",
+                "Fraud",
+                "Assault",
+                "Cyber Crime",
+                "Harassment",
+                "Vandalism",
                 "Other"
-        });
-        
-        setupSpinner(spinnerFilterSeverity, new String[]{
-                "All Severity", 
-                "Low", 
-                "Medium", 
-                "High", 
-                "Critical"
-        });
-
-        findViewById(R.id.btnApplyFilter).setOnClickListener(v -> {
-            applyFilter();
-        });
-        
-        findViewById(R.id.btnClearFilter).setOnClickListener(v -> {
-            etSearch.setText("");
-            spinnerFilterCrime.setSelection(0);
-            spinnerFilterSeverity.setSelection(0);
-            applyFilter();
-            dashboardScroll.fullScroll(View.FOCUS_UP);
-        });
-
-        etSearch.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                applyFilter();
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-        });
-        
-        loadDashboard();
-    }
-
-    private void setupSpinner(Spinner spinner, String[] items) {
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, items) {
-            @Override
-            public View getView(int p, View v, ViewGroup pr) {
-                TextView t = (TextView) super.getView(p, v, pr);
-                t.setTextColor(Color.WHITE);
-                t.setTextSize(15);
-                return t;
-            }
-
-            @Override
-            public View getDropDownView(int p, View v, ViewGroup pr) {
-                TextView t = (TextView) super.getDropDownView(p, v, pr);
-                t.setTextColor(Color.WHITE);
-                t.setTextSize(15);
-                t.setBackgroundColor(Color.rgb(27, 32, 40));
-                t.setPadding(16, 16, 16, 16);
-                return t;
-            }
         };
-        spinner.setAdapter(adapter);
+
+        ArrayAdapter<String> crimeAdapter =
+                new ArrayAdapter<String>(
+                        this,
+                        android.R.layout.simple_spinner_item,
+                        crimeTypes) {
+
+                    @Override
+                    public View getView(
+                            int position,
+                            View convertView,
+                            ViewGroup parent) {
+
+                        TextView text =
+                                (TextView) super.getView(
+                                        position,
+                                        convertView,
+                                        parent
+                                );
+
+                        text.setTextColor(Color.WHITE);
+                        text.setTextSize(15);
+
+                        return text;
+                    }
+
+                    @Override
+                    public View getDropDownView(
+                            int position,
+                            View convertView,
+                            ViewGroup parent) {
+
+                        TextView text =
+                                (TextView) super.getDropDownView(
+                                        position,
+                                        convertView,
+                                        parent
+                                );
+
+                        text.setTextColor(Color.WHITE);
+                        text.setTextSize(15);
+
+                        text.setBackgroundColor(
+                                Color.rgb(27, 32, 40)
+                        );
+
+                        text.setPadding(
+                                16,
+                                16,
+                                16,
+                                16
+                        );
+
+                        return text;
+                    }
+                };
+
+        crimeAdapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item
+        );
+
+        spinnerFilterCrime.setAdapter(crimeAdapter);
+
+
+        String[] severityLevels = {
+                "All Severity",
+                "Low",
+                "Medium",
+                "High",
+                "Critical"
+        };
+
+        ArrayAdapter<String> severityAdapter =
+                new ArrayAdapter<String>(
+                        this,
+                        android.R.layout.simple_spinner_item,
+                        severityLevels) {
+
+                    @Override
+                    public View getView(
+                            int position,
+                            View convertView,
+                            ViewGroup parent) {
+
+                        TextView text =
+                                (TextView) super.getView(
+                                        position,
+                                        convertView,
+                                        parent
+                                );
+
+                        text.setTextColor(Color.WHITE);
+                        text.setTextSize(15);
+
+                        return text;
+                    }
+
+                    @Override
+                    public View getDropDownView(
+                            int position,
+                            View convertView,
+                            ViewGroup parent) {
+
+                        TextView text =
+                                (TextView) super.getDropDownView(
+                                        position,
+                                        convertView,
+                                        parent
+                                );
+
+                        text.setTextColor(Color.WHITE);
+                        text.setTextSize(15);
+
+                        text.setBackgroundColor(
+                                Color.rgb(27, 32, 40)
+                        );
+
+                        text.setPadding(
+                                16,
+                                16,
+                                16,
+                                16
+                        );
+
+                        return text;
+                    }
+                };
+
+        severityAdapter.setDropDownViewResource(
+                android.R.layout.simple_spinner_dropdown_item
+        );
+
+        spinnerFilterSeverity.setAdapter(severityAdapter);
     }
 
-    private void loadDashboard() {
-        tvTotalReports.setText("TOTAL REPORTS\n" + getCount("SELECT COUNT(*) FROM reports"));
-        
-        tvHighRisk.setText("HIGH-RISK INCIDENTS\n" + getCount("SELECT COUNT(*) FROM reports WHERE severity IN ('High', 'Critical')"));
-        
-        tvCommonCrime.setText("MOST REPORTED CRIME\n" + getStringVal("SELECT crime_type FROM reports GROUP BY crime_type ORDER BY COUNT(*) DESC LIMIT 1"));
-        
-        tvCommonArea.setText("MOST REPORTED AREA\n" + getStringVal("SELECT location FROM reports GROUP BY location ORDER BY COUNT(*) DESC LIMIT 1"));
-        
-        applyFilter();
+    private void loadReportsFromFirebase() {
+
+        firestore.collection("reports")
+                .orderBy(
+                        "date",
+                        Query.Direction.DESCENDING
+                )
+                .get()
+                .addOnSuccessListener(queryDocumentSnapshots -> {
+
+                    allReports.clear();
+
+                    for (DocumentSnapshot document :
+                            queryDocumentSnapshots.getDocuments()) {
+
+                        String crimeType =
+                                getString(document, "crimeType");
+
+                        String location =
+                                getString(document, "location");
+
+                        String severity =
+                                getString(document, "severity");
+
+                        String description =
+                                getString(document, "description");
+
+                        String date =
+                                getString(document, "date");
+
+                        allReports.add(
+                                new ReportModel(
+                                        crimeType,
+                                        location,
+                                        severity,
+                                        description,
+                                        date
+                                )
+                        );
+                    }
+
+                    updateStatistics();
+
+                    displayIncidents(allReports);
+                })
+                .addOnFailureListener(e -> {
+
+                    tvRecentIncidents.setText(
+                            "Unable to load incidents.\n\n"
+                                    + e.getMessage()
+                    );
+                });
     }
 
-    private int getCount(String q) {
-        Cursor c = db.getReadableDatabase().rawQuery(q, null);
-        int res = 0;
-        if (c.moveToFirst()) {
-            res = c.getInt(0);
+    private String getString(
+            DocumentSnapshot document,
+            String field) {
+
+        String value = document.getString(field);
+
+        if (value == null) {
+            return "-";
         }
-        c.close();
-        return res;
+
+        return value;
     }
 
-    private String getStringVal(String q) {
-        Cursor c = db.getReadableDatabase().rawQuery(q, null);
-        String res = "-";
-        if (c.moveToFirst()) {
-            res = c.getString(0);
+    private void updateStatistics() {
+
+        int totalReports =
+                allReports.size();
+
+        int highRisk =
+                0;
+
+        String commonCrime =
+                "-";
+
+        String commonArea =
+                "-";
+
+        java.util.HashMap<String, Integer>
+                crimeCount =
+                new java.util.HashMap<>();
+
+        java.util.HashMap<String, Integer>
+                areaCount =
+                new java.util.HashMap<>();
+
+        for (ReportModel report : allReports) {
+
+            if (report.severity.equals("High")
+                    || report.severity.equals("Critical")) {
+
+                highRisk++;
+            }
+
+            crimeCount.put(
+                    report.crimeType,
+                    crimeCount.getOrDefault(
+                            report.crimeType,
+                            0
+                    ) + 1
+            );
+
+            areaCount.put(
+                    report.location,
+                    areaCount.getOrDefault(
+                            report.location,
+                            0
+                    ) + 1
+            );
         }
-        c.close();
-        return res;
+
+        int highestCrimeCount = 0;
+
+        for (String crime :
+                crimeCount.keySet()) {
+
+            int count =
+                    crimeCount.get(crime);
+
+            if (count > highestCrimeCount) {
+
+                highestCrimeCount = count;
+                commonCrime = crime;
+            }
+        }
+
+        int highestAreaCount = 0;
+
+        for (String area :
+                areaCount.keySet()) {
+
+            int count =
+                    areaCount.get(area);
+
+            if (count > highestAreaCount) {
+
+                highestAreaCount = count;
+                commonArea = area;
+            }
+        }
+
+        tvTotalReports.setText(
+                "TOTAL REPORTS\n"
+                        + totalReports
+        );
+
+        tvHighRisk.setText(
+                "HIGH-RISK INCIDENTS\n"
+                        + highRisk
+        );
+
+        tvCommonCrime.setText(
+                "MOST REPORTED CRIME\n"
+                        + commonCrime
+        );
+
+        tvCommonArea.setText(
+                "MOST REPORTED AREA\n"
+                        + commonArea
+        );
     }
 
     private void applyFilter() {
-        String s = etSearch.getText().toString().trim();
-        String c = spinnerFilterCrime.getSelectedItem().toString();
-        String sv = spinnerFilterSeverity.getSelectedItem().toString();
-        
-        StringBuilder q = new StringBuilder("SELECT crime_type, location, severity, description, date FROM reports WHERE 1=1");
-        ArrayList<String> args = new ArrayList<>();
-        
-        if (!s.isEmpty()) {
-            q.append(" AND (crime_type LIKE ? OR location LIKE ? OR description LIKE ?)");
-            String v = "%" + s + "%";
-            args.add(v);
-            args.add(v);
-            args.add(v);
-        }
-        
-        if (!c.equals("All Crime Types")) {
-            q.append(" AND crime_type = ?");
-            args.add(c);
-        }
-        
-        if (!sv.equals("All Severity")) {
-            q.append(" AND severity = ?");
-            args.add(sv);
-        }
-        
-        q.append(" ORDER BY id DESC");
-        
-        Cursor cr = db.getReadableDatabase().rawQuery(q.toString(), args.toArray(new String[0]));
-        StringBuilder sb = new StringBuilder();
-        
-        if (cr.getCount() == 0) {
-            sb.append("No matching incidents found.");
-        } else {
-            while (cr.moveToNext()) {
-                sb.append("Crime: ")
-                  .append(cr.getString(0))
-                  .append("\nLocation: ")
-                  .append(cr.getString(1))
-                  .append("\nSeverity: ")
-                  .append(cr.getString(2))
-                  .append("\nDescription: ")
-                  .append(cr.getString(3))
-                  .append("\nDate: ")
-                  .append(cr.getString(4))
-                  .append("\n--------------------\n\n");
+
+        String search =
+                etSearch.getText()
+                        .toString()
+                        .trim()
+                        .toLowerCase();
+
+        String selectedCrime =
+                spinnerFilterCrime
+                        .getSelectedItem()
+                        .toString();
+
+        String selectedSeverity =
+                spinnerFilterSeverity
+                        .getSelectedItem()
+                        .toString();
+
+        List<ReportModel> filteredReports =
+                new ArrayList<>();
+
+        for (ReportModel report :
+                allReports) {
+
+            boolean matchesSearch =
+                    search.isEmpty()
+                            || report.crimeType
+                            .toLowerCase()
+                            .contains(search)
+                            || report.location
+                            .toLowerCase()
+                            .contains(search)
+                            || report.description
+                            .toLowerCase()
+                            .contains(search);
+
+            boolean matchesCrime =
+                    selectedCrime.equals(
+                            "All Crime Types"
+                    )
+                            || report.crimeType.equals(
+                            selectedCrime
+                    );
+
+            boolean matchesSeverity =
+                    selectedSeverity.equals(
+                            "All Severity"
+                    )
+                            || report.severity.equals(
+                            selectedSeverity
+                    );
+
+            if (matchesSearch
+                    && matchesCrime
+                    && matchesSeverity) {
+
+                filteredReports.add(report);
             }
         }
-        cr.close();
-        tvRecentIncidents.setText(sb.toString());
+
+        displayIncidents(filteredReports);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (db != null) {
-            loadDashboard();
+    private void clearFilter() {
+
+        etSearch.setText("");
+
+        spinnerFilterCrime.setSelection(0);
+
+        spinnerFilterSeverity.setSelection(0);
+
+        displayIncidents(allReports);
+
+        dashboardScroll.fullScroll(
+                View.FOCUS_UP
+        );
+    }
+
+    private void displayIncidents(
+            List<ReportModel> reports) {
+
+        StringBuilder incidents =
+                new StringBuilder();
+
+        if (reports.isEmpty()) {
+
+            incidents.append(
+                    "No matching incidents found."
+            );
+
+        } else {
+
+            for (ReportModel report :
+                    reports) {
+
+                incidents.append(
+                                "Crime: "
+                        )
+                        .append(report.crimeType)
+                        .append("\n");
+
+                incidents.append(
+                                "Location: "
+                        )
+                        .append(report.location)
+                        .append("\n");
+
+                incidents.append(
+                                "Severity: "
+                        )
+                        .append(report.severity)
+                        .append("\n");
+
+                incidents.append(
+                                "Description: "
+                        )
+                        .append(report.description)
+                        .append("\n");
+
+                incidents.append(
+                                "Date: "
+                        )
+                        .append(report.date)
+                        .append("\n");
+
+                incidents.append(
+                        "--------------------\n\n"
+                );
+            }
+        }
+
+        tvRecentIncidents.setText(
+                incidents.toString()
+        );
+    }
+
+    private static class ReportModel {
+
+        String crimeType;
+        String location;
+        String severity;
+        String description;
+        String date;
+
+        ReportModel(
+                String crimeType,
+                String location,
+                String severity,
+                String description,
+                String date) {
+
+            this.crimeType = crimeType;
+            this.location = location;
+            this.severity = severity;
+            this.description = description;
+            this.date = date;
         }
     }
 }

@@ -1,97 +1,59 @@
 package com.example.crimeshield;
 
-import android.database.Cursor;
 import android.os.Bundle;
 import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
-import java.util.Locale;
+import com.google.firebase.firestore.FirebaseFirestore;
+import java.util.HashMap;
+import java.util.Map;
 
 public class AnalysisActivity extends AppCompatActivity {
-    TextView tvTotal;
-    TextView tvHighRisk;
-    TextView tvTopCrime;
-    TextView tvTopArea;
-    TextView tvAnalysis;
-    DatabaseHelper db;
+    TextView tvTotal, tvHighRisk, tvCrime, tvArea, tvAnalysis;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_analysis);
-        
-        db = new DatabaseHelper(this);
-        
+
+        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
         tvTotal = findViewById(R.id.tvTotal);
         tvHighRisk = findViewById(R.id.tvHighRisk);
-        tvTopCrime = findViewById(R.id.tvTopCrime);
-        tvTopArea = findViewById(R.id.tvTopArea);
+        tvCrime = findViewById(R.id.tvCrime);
+        tvArea = findViewById(R.id.tvArea);
         tvAnalysis = findViewById(R.id.tvAnalysis);
-        
-        findViewById(R.id.btnBack).setOnClickListener(v -> finish());
-        
-        analyzeData();
+
+        FirebaseFirestore.getInstance().collection("reports").get().addOnSuccessListener(result -> {
+            if (result.isEmpty()) {
+                tvTotal.setText("Total Reports\n0");
+                tvHighRisk.setText("High-Risk Incidents\n0");
+                tvCrime.setText("Most Reported Crime\n-");
+                tvArea.setText("Most Reported Area\n-");
+                tvAnalysis.setText("No incidents available.");
+                return;
+            }
+            Map<String, Integer> crimes = new HashMap<>(), areas = new HashMap<>();
+            int highRisk = 0;
+            for (var doc : result) {
+                String c = doc.getString("crimeType"), a = doc.getString("location"), s = doc.getString("severity");
+                if (c != null) crimes.merge(c, 1, Integer::sum);
+                if (a != null) areas.merge(a, 1, Integer::sum);
+                if ("High".equals(s) || "Critical".equals(s)) highRisk++;
+            }
+            String commonCrime = getMost(crimes), commonArea = getMost(areas);
+            tvTotal.setText("Total Reports\n" + result.size());
+            tvHighRisk.setText("High-Risk Incidents\n" + highRisk);
+            tvCrime.setText("Most Reported Crime\n" + commonCrime);
+            tvArea.setText("Most Reported Area\n" + commonArea);
+            tvAnalysis.setText("Total Reports: " + result.size() + "\n\nHigh-Risk Incidents: " + highRisk + "\n\nMost Reported Crime: " + commonCrime + "\n\nMost Reported Area: " + commonArea);
+        }).addOnFailureListener(e -> tvAnalysis.setText("Unable to load analysis."));
     }
 
-    private void analyzeData() {
-        int total = getCount("SELECT COUNT(*) FROM reports");
-        int high = getCount("SELECT COUNT(*) FROM reports WHERE severity IN ('High', 'Critical')");
-        
-        String topC = getVal("SELECT crime_type FROM reports GROUP BY crime_type ORDER BY COUNT(*) DESC LIMIT 1");
-        String topA = getVal("SELECT location FROM reports GROUP BY location ORDER BY COUNT(*) DESC LIMIT 1");
-        
-        tvTotal.setText("TOTAL INCIDENTS\n" + total);
-        tvHighRisk.setText("HIGH-RISK INCIDENTS\n" + high);
-        tvTopCrime.setText("DOMINANT CRIME TYPE\n" + topC);
-        tvTopArea.setText("HIGH-ACTIVITY AREA\n" + topA);
-
-        if (total == 0) {
-            tvAnalysis.setText("PATTERN SUMMARY\n\nNo data available.");
-            return;
+    private String getMost(Map<String, Integer> map) {
+        String most = "-";
+        int max = 0;
+        for (Map.Entry<String, Integer> e : map.entrySet()) {
+            if (e.getValue() > max) { max = e.getValue(); most = e.getKey(); }
         }
-        
-        double p = (high * 100.0) / total;
-        String level = p >= 60 ? "HIGH" : (p >= 30 ? "MODERATE" : "LOW");
-        String insight = p >= 60 ? "High percentage of high-risk incidents. Attention needed." : (p >= 30 ? "Moderate level of high-risk incidents. Monitoring needed." : "Most incidents are currently below high-risk.");
-
-        StringBuilder dist = new StringBuilder("\nCRIME DISTRIBUTION:\n");
-        Cursor c = db.getReadableDatabase().rawQuery("SELECT crime_type, COUNT(*) FROM reports GROUP BY crime_type ORDER BY COUNT(*) DESC", null);
-        while (c.moveToNext()) {
-            dist.append("• ")
-                .append(c.getString(0))
-                .append(": ")
-                .append(c.getInt(1))
-                .append("\n");
-        }
-        c.close();
-
-        tvAnalysis.setText(String.format(Locale.getDefault(), 
-            "PATTERN SUMMARY\n\nTotal: %d\nHigh-risk: %d\nRisk: %.1f%%\nLevel: %s\n%s\nINSIGHT\n%s", 
-            total, high, p, level, dist.toString(), insight));
-    }
-
-    private int getCount(String q) {
-        Cursor c = db.getReadableDatabase().rawQuery(q, null);
-        int res = 0;
-        if (c.moveToFirst()) {
-            res = c.getInt(0);
-        }
-        c.close();
-        return res;
-    }
-
-    private String getVal(String q) {
-        Cursor c = db.getReadableDatabase().rawQuery(q, null);
-        String res = "No data";
-        if (c.moveToFirst()) {
-            res = c.getString(0);
-        }
-        c.close();
-        return res;
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        analyzeData();
+        return most;
     }
 }

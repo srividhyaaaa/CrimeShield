@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "84752566297",
+    "project_id": "crimeshield-19",
+    "storage_bucket": "crimeshield-19.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:84752566297:android:a34d4a9fc3c5bbf95d0288",
+        "android_client_info": {
+          "package_name": "com.example.crimeshield"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_ls7-bkLD8_eZttTl7xioYa4t-FOgEJI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

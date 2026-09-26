@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#101318"
@@ -11,81 +10,110 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="24dp">
 
-        <ImageButton
+        <Button
             android:id="@+id/btnBack"
-            android:layout_width="48dp"
+            android:layout_width="wrap_content"
             android:layout_height="48dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_arrow_back" />
+            android:background="@android:color/transparent"
+            android:drawableStart="@drawable/ic_arrow_back"
+            android:drawablePadding="8dp"
+            android:text="Back"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textAllCaps="false"
+            android:contentDescription="Back"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="PATTERN ANALYSIS"
-            android:textColor="#FFF"
-            android:textSize="28sp"
-            android:textStyle="bold" />
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Crime trends and risk insights"
-            android:textColor="#9EA3AA" />
+            android:textColor="#A9AFB8"
+            android:textSize="13sp"/>
 
         <TextView
-            style="@style/CSLabel"
-            android:layout_marginTop="30dp"
-            android:text="OVERVIEW" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OVERVIEW"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_marginTop="28dp"/>
 
         <TextView
             android:id="@+id/tvTotal"
-            style="@style/CSTextCard"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
             android:layout_marginTop="12dp"
-            android:textSize="17sp" />
+            android:padding="16dp"
+            android:gravity="center_vertical"
+            android:background="#1B2028"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"/>
 
         <TextView
             android:id="@+id/tvHighRisk"
-            style="@style/CSTextCard"
-            android:layout_marginTop="12dp"
-            android:textSize="17sp" />
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="10dp"
+            android:padding="16dp"
+            android:gravity="center_vertical"
+            android:background="#1B2028"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"/>
 
         <TextView
-            android:id="@+id/tvTopCrime"
-            style="@style/CSTextCard"
-            android:layout_marginTop="12dp"
-            android:textSize="16sp" />
+            android:id="@+id/tvCrime"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="10dp"
+            android:padding="16dp"
+            android:gravity="center_vertical"
+            android:background="#1B2028"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"/>
 
         <TextView
-            android:id="@+id/tvTopArea"
-            style="@style/CSTextCard"
-            android:layout_marginTop="12dp"
-            android:textSize="16sp" />
+            android:id="@+id/tvArea"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="10dp"
+            android:padding="16dp"
+            android:gravity="center_vertical"
+            android:background="#1B2028"
+            android:textColor="#FFFFFF"
+            android:textSize="16sp"/>
 
         <TextView
-            style="@style/CSLabel"
-            android:layout_marginTop="30dp"
-            android:text="RISK ANALYSIS" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="RISK ANALYSIS"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="14sp"
+            android:layout_marginTop="28dp"/>
 
         <TextView
             android:id="@+id/tvAnalysis"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
+            android:padding="16dp"
             android:background="#1B2028"
-            android:padding="20dp"
-            android:textColor="#D0D4DA"
-            android:lineSpacingExtra="5dp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:gravity="center"
-            android:text="CrimeShield • Anonymous Intelligence"
-            android:textColor="#777D86"
-            android:textSize="12sp" />
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
+            android:lineSpacingExtra="8dp"/>
 
     </LinearLayout>
 
