@@ -2,82 +2,86 @@
 
 ## Intelligent Anonymous Crime Reporting and Incident Pattern Analysis System
 
-CrimeShield is an Android-based application designed to provide a secure and anonymous platform for reporting incidents and analyzing crime patterns.
+CrimeShield is an Android-based crime reporting and incident analysis application designed to provide a secure and simple platform for reporting incidents anonymously and analyzing reported crime patterns.
 
-The application allows users to submit crime reports without revealing their identity and provides a dashboard for viewing incident statistics, searching reports, filtering incidents, and identifying common crime patterns.
+The application allows users to submit incident details and provides dashboards and pattern analysis based on the collected reports.
 
 ---
 
 ## Features
 
-### 🔐 Anonymous Crime Reporting
-- Submit crime reports without providing personal identity.
-- Select the crime type and severity.
-- Enter the incident location and description.
-- Validate required information before submission.
+- Anonymous crime incident reporting
+- Crime category selection
+- Location and incident description
+- Severity classification
+- Firebase Firestore database
+- Incident dashboard
+- Search and filtering
+- High-risk incident identification
+- Most reported crime analysis
+- Most reported area analysis
+- Pattern analysis
+- Dark professional user interface
+- Simple navigation between screens
 
-### 📊 Incident Dashboard
-- View the total number of reported incidents.
-- Display high-risk incidents.
-- Identify the most frequently reported crime.
-- Identify commonly reported areas.
-- View recent incident reports.
-- Search incidents using keywords.
-- Filter reports by crime type and severity.
+---
 
-### 📈 Pattern Analysis
-- Analyze crime distribution.
-- Identify frequently occurring crime types.
-- Analyze incident severity.
-- Identify commonly reported locations.
-- Present useful crime statistics for better understanding of incident patterns.
+## Application Screens
 
-### 💾 Local Database
-- Uses SQLite for storing incident reports.
-- Stores crime type, location, severity, description, date, and status.
-- Dashboard and analysis screens retrieve data directly from the database.
+### Home
+Provides access to the main features of the application:
 
-### 🎨 Professional User Interface
-- Dark-themed safety and security design.
-- Simple navigation.
-- Consistent layouts and buttons.
-- Back navigation on application screens.
-- Scrollable dashboard for viewing multiple sections.
+- Report an Incident
+- Incident Dashboard
+- Pattern Analysis
+
+### Report Incident
+Users can submit:
+
+- Crime type
+- Location
+- Severity
+- Incident description
+
+Submitted reports are stored in Firebase Firestore.
+
+### Incident Dashboard
+Displays information such as:
+
+- Total reports
+- High-risk incidents
+- Most reported crime
+- Most reported area
+- Recent incidents
+
+The dashboard also provides search and filtering options.
+
+### Pattern Analysis
+Analyzes the collected incident reports and displays:
+
+- Total reports
+- High-risk incidents
+- Most reported crime
+- Most reported area
+- Risk analysis
 
 ---
 
 ## Technology Stack
 
-| Technology | Purpose |
-|------------|---------|
-| Java | Application development |
-| XML | User interface design |
-| Android Studio | Development environment |
-| SQLite | Local database |
-| Gradle | Project build system |
+- **Language:** Java
+- **UI:** XML
+- **Platform:** Android
+- **IDE:** Android Studio
+- **Database:** Firebase Cloud Firestore
+- **Build System:** Gradle
+- **Minimum/Target SDK:** Android SDK
 
 ---
 
-## Application Flow
+## Firebase Database
+
+Crime reports are stored in the Firestore collection:
 
 ```text
-                    ┌──────────────┐
-                    │  Home Screen │
-                    └──────┬───────┘
-                           │
-          ┌────────────────┼────────────────┐
-          │                │                │
-          ▼                ▼                ▼
- ┌────────────────┐ ┌────────────────┐ ┌──────────────────┐
- │ Report Incident│ │    Dashboard   │ │ Pattern Analysis │
- └───────┬────────┘ └───────┬────────┘ └──────────────────┘
-         │                  │
-         ▼                  ├── Statistics
- ┌────────────────┐         ├── Search
- │  Submit Report │         ├── Crime Filter
- └───────┬────────┘         ├── Severity Filter
-         │                  └── Recent Incidents
-         ▼
- ┌────────────────┐
- │ SQLite Database│
- └────────────────┘
+reports
