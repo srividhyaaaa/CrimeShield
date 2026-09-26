@@ -6,15 +6,13 @@ CrimeShield is an Android-based crime reporting and incident analysis applicatio
 
 The application allows users to submit incident details and provides dashboards and pattern analysis based on the collected reports.
 
----
-
 ## Features
 
 - Anonymous crime incident reporting
 - Crime category selection
 - Location and incident description
 - Severity classification
-- Firebase Firestore database
+- Firebase Cloud Firestore database
 - Incident dashboard
 - Search and filtering
 - High-risk incident identification
@@ -24,30 +22,25 @@ The application allows users to submit incident details and provides dashboards 
 - Dark professional user interface
 - Simple navigation between screens
 
----
-
 ## Application Screens
 
 ### Home
-Provides access to the main features of the application:
-
+Provides access to:
 - Report an Incident
 - Incident Dashboard
 - Pattern Analysis
 
 ### Report Incident
 Users can submit:
-
 - Crime type
 - Location
 - Severity
 - Incident description
 
-Submitted reports are stored in Firebase Firestore.
+Submitted reports are stored in Firebase Cloud Firestore.
 
 ### Incident Dashboard
-Displays information such as:
-
+Displays:
 - Total reports
 - High-risk incidents
 - Most reported crime
@@ -57,15 +50,12 @@ Displays information such as:
 The dashboard also provides search and filtering options.
 
 ### Pattern Analysis
-Analyzes the collected incident reports and displays:
-
+Analyzes collected incident reports and displays:
 - Total reports
 - High-risk incidents
 - Most reported crime
 - Most reported area
 - Risk analysis
-
----
 
 ## Technology Stack
 
@@ -75,9 +65,6 @@ Analyzes the collected incident reports and displays:
 - **IDE:** Android Studio
 - **Database:** Firebase Cloud Firestore
 - **Build System:** Gradle
-- **Minimum/Target SDK:** Android SDK
-
----
 
 ## Firebase Database
 
@@ -85,3 +72,132 @@ Crime reports are stored in the Firestore collection:
 
 ```text
 reports
+```
+
+Each report contains:
+
+```text
+crimeType
+location
+severity
+description
+date
+status
+```
+
+## Application Flow
+
+```text
+Home
+ │
+ ├── Report Incident
+ │       │
+ │       └── Save Report → Firebase Firestore
+ │
+ ├── Incident Dashboard
+ │       │
+ │       └── Read & Filter Reports
+ │
+ └── Pattern Analysis
+         │
+         └── Analyze Reports
+```
+
+## Project Structure
+
+```text
+CrimeShield
+│
+├── app
+│   ├── src
+│   │   └── main
+│   │       ├── java
+│   │       │   └── com.example.crimeshield
+│   │       │       ├── MainActivity.java
+│   │       │       ├── ReportActivity.java
+│   │       │       ├── DashboardActivity.java
+│   │       │       └── AnalysisActivity.java
+│   │       │
+│   │       └── res
+│   │           ├── layout
+│   │           ├── drawable
+│   │           └── values
+│   │
+│   └── google-services.json
+│
+└── README.md
+```
+
+## Crime Categories
+
+The application supports different crime categories through the incident reporting form.
+
+Examples include:
+- Theft
+- Cyber Crime
+- Harassment
+- Assault
+- Vandalism
+- Other
+
+## Getting Started
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/srividhyaaaa/CrimeShield.git
+```
+
+### 2. Open the Project
+
+Open the project in Android Studio.
+
+### 3. Configure Firebase
+
+Configure the Firebase project and place the required:
+
+```text
+google-services.json
+```
+
+inside:
+
+```text
+app/
+```
+
+### 4. Build the Project
+
+Sync Gradle and build the application.
+
+### 5. Run
+
+Run the application on an Android emulator or physical Android device.
+
+## Future Enhancements
+
+Possible future improvements include:
+
+- Anonymous user authentication
+- Admin dashboard
+- Real-time notifications
+- Advanced crime trend visualization
+- Geographic crime visualization
+- Improved incident verification
+- More detailed analytics
+- Secure production-level Firestore rules
+
+## Objective
+
+The main objective of CrimeShield is to provide a simple digital platform for reporting incidents while using collected reports to identify common crime patterns and high-risk areas.
+
+## Disclaimer
+
+CrimeShield is an academic/project application developed for educational and demonstration purposes. It should not be considered a replacement for official emergency services or law-enforcement reporting systems.
+
+## Author
+
+**Srividhya**
+
+B.Tech – Computer Science and Engineering  
+Vardhaman College of Engineering, Hyderabad
