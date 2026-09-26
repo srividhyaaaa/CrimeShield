@@ -60,24 +60,24 @@ The application allows users to submit crime reports without revealing their ide
 
 ## Application Flow
 
-Home Screen
-     |
-     ├── Report an Incident
-     |       |
-     |       └── Submit Report
-     |               |
-     |               └── SQLite Database
-     |
-     ├── Incident Dashboard
-     |       |
-     |       ├── Statistics
-     |       ├── Search
-     |       ├── Crime Filter
-     |       ├── Severity Filter
-     |       └── Recent Incidents
-     |
-     └── Pattern Analysis
-             |
-             ├── Crime Patterns
-             ├── Severity Analysis
-             └── Location Patterns
+```text
+                    ┌──────────────┐
+                    │  Home Screen │
+                    └──────┬───────┘
+                           │
+          ┌────────────────┼────────────────┐
+          │                │                │
+          ▼                ▼                ▼
+ ┌────────────────┐ ┌────────────────┐ ┌──────────────────┐
+ │ Report Incident│ │    Dashboard   │ │ Pattern Analysis │
+ └───────┬────────┘ └───────┬────────┘ └──────────────────┘
+         │                  │
+         ▼                  ├── Statistics
+ ┌────────────────┐         ├── Search
+ │  Submit Report │         ├── Crime Filter
+ └───────┬────────┘         ├── Severity Filter
+         │                  └── Recent Incidents
+         ▼
+ ┌────────────────┐
+ │ SQLite Database│
+ └────────────────┘
