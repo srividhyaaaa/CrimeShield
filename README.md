@@ -140,39 +140,7 @@ Examples include:
 - Vandalism
 - Other
 
-## Getting Started
 
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/srividhyaaaa/CrimeShield.git
-```
-
-### 2. Open the Project
-
-Open the project in Android Studio.
-
-### 3. Configure Firebase
-
-Configure the Firebase project and place the required:
-
-```text
-google-services.json
-```
-
-inside:
-
-```text
-app/
-```
-
-### 4. Build the Project
-
-Sync Gradle and build the application.
-
-### 5. Run
-
-Run the application on an Android emulator or physical Android device.
 
 ## Future Enhancements
 
@@ -195,9 +163,4 @@ The main objective of CrimeShield is to provide a simple digital platform for re
 
 CrimeShield is an academic/project application developed for educational and demonstration purposes. It should not be considered a replacement for official emergency services or law-enforcement reporting systems.
 
-## Author
 
-**Srividhya**
-
-B.Tech – Computer Science and Engineering  
-Vardhaman College of Engineering, Hyderabad
